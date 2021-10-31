@@ -141,7 +141,7 @@ resource "aws_instance" "week9-vm-v2" {
   ami                  = "ami-02e136e904f3da870"
   instance_type        = "t2.micro"
   subnet_id            = aws_subnet.week9-sub-a-v2.id
-  iam_instance_profile = aws_iam_instance_profile.automation_iam_profile-v2.name
+  iam_instance_profile = aws_iam_instance_profile.week9_iam_profile.name
 
   vpc_security_group_ids = [
     aws_security_group.week9-ssh-sg-v2.id
