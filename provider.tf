@@ -11,7 +11,7 @@ terraform {
 
   backend "s3" {
     bucket = "ece592-cloudtrail-brando"
-    key    = "state.automation"
+    key    = "state.week9"
     region = "us-east-1"
   }
 }
@@ -22,69 +22,57 @@ provider "aws" {
 }
 
 # VPC
-resource "aws_vpc" "week8-vpc-v2" {
+resource "aws_vpc" "week9-vpc-v2" {
   cidr_block       = "10.0.0.0/16"
   instance_tenancy = "default"
 
   tags = {
-    Name = "week8-vpc"
+    Name = "week9-vpc"
   }
 }
 
 # Subnets 
 
 # Subnet 1
-resource "aws_subnet" "week8-sub-a-v2" {
-  vpc_id                  = aws_vpc.week8-vpc-v2.id
+resource "aws_subnet" "week9-sub-a-v2" {
+  vpc_id                  = aws_vpc.week9-vpc-v2.id
   cidr_block              = "10.0.1.0/24"
   availability_zone       = "us-east-1a"
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "week8-sub-a"
-  }
-
-  lifecycle {
-    prevent_destroy = true
+    Name = "week9-sub-a"
   }
 }
 
 # Subnet 2
-resource "aws_subnet" "week8-sub-b-v2" {
-  vpc_id                  = aws_vpc.week8-vpc-v2.id
+resource "aws_subnet" "week9-sub-b-v2" {
+  vpc_id                  = aws_vpc.week9-vpc-v2.id
   cidr_block              = "10.0.2.0/24"
   availability_zone       = "us-east-1b"
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "week8-sub-b"
-  }
-
-  lifecycle {
-    prevent_destroy = true
+    Name = "week9-sub-b"
   }
 }
 
 # Internet Gate Way 
-resource "aws_internet_gateway" "week8-igw-v2" {
-  vpc_id = aws_vpc.week8-vpc-v2.id
+resource "aws_internet_gateway" "week9-igw-v2" {
+  vpc_id = aws_vpc.week9-vpc-v2.id
 
   tags = {
-    Name = "week8-igw"
-  }
-
-  lifecycle {
-    prevent_destroy = true
+    Name = "week9-igw"
   }
 }
 
 # Route Table
-resource "aws_route_table" "week8-rt-v2" {
-  vpc_id = aws_vpc.week8-vpc-v2.id
+resource "aws_route_table" "week9-rt-v2" {
+  vpc_id = aws_vpc.week9-vpc-v2.id
 
   route = [{
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.week8-igw-v2.id
+    gateway_id = aws_internet_gateway.week9-igw-v2.id
 
     # Values suggested by professor
     egress_only_gateway_id    = ""
@@ -105,19 +93,15 @@ resource "aws_route_table" "week8-rt-v2" {
   }, ]
 
   tags = {
-    Name = "week8-rt"
-  }
-
-  lifecycle {
-    prevent_destroy = true
+    Name = "week9-rt"
   }
 }
 
 # Security Group
-resource "aws_security_group" "week8-ssh-sg-v2" {
-  name        = "week8_ssh_sg"
+resource "aws_security_group" "week9-ssh-sg-v2" {
+  name        = "week9_ssh_sg"
   description = "Allow SSH inbound traffic"
-  vpc_id      = aws_vpc.week8-vpc-v2.id
+  vpc_id      = aws_vpc.week9-vpc-v2.id
 
   ingress = [{
     description = "SSH from VPC"
@@ -148,50 +132,31 @@ resource "aws_security_group" "week8-ssh-sg-v2" {
   }]
 
   tags = {
-    Name = "week8-ssh-sg"
-  }
-
-  lifecycle {
-    prevent_destroy = true
+    Name = "week9-ssh-sg"
   }
 }
 
 # EC2
-resource "aws_instance" "week8-vm-v2" {
+resource "aws_instance" "week9-vm-v2" {
   ami                  = "ami-02e136e904f3da870"
   instance_type        = "t2.micro"
-  subnet_id            = aws_subnet.week8-sub-a-v2.id
+  subnet_id            = aws_subnet.week9-sub-a-v2.id
   iam_instance_profile = aws_iam_instance_profile.automation_iam_profile-v2.name
 
   vpc_security_group_ids = [
-    aws_security_group.week8-ssh-sg-v2.id
+    aws_security_group.week9-ssh-sg-v2.id
   ]
 
   key_name = "ECE592"
 
   tags = {
-    Name = "week8-vm"
-  }
-
-  lifecycle {
-    prevent_destroy = false
-  }
-}
-
-# AMI ref
-data "aws_ami" "latest-ubuntu" {
-  most_recent = true
-  owners      = ["amazon"]
-
-  filter {
-    name   = "name"
-    values = ["amzn2-ami-hvm-*"]
+    Name = "week9-vm"
   }
 }
 
 # IAM profile ref
-resource "aws_iam_instance_profile" "automation_iam_profile-v2" {
-  name = "automation_iam_profile-v2"
+resource "aws_iam_instance_profile" "week9_iam_profile" {
+  name = "week9_iam_profile"
   role = aws_iam_role.automation-role-v3.name
   tags = {}
 }
