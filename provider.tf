@@ -150,3 +150,41 @@ resource "aws_security_group" "week9-ssh-sg-v2" {
   }
 }
 
+# Security Group
+resource "aws_security_group" "week9-ssh-pri-sg" {
+  name        = "week9-ssh-pri-sg"
+  description = "Allow SSH inbound traffic"
+  vpc_id      = aws_vpc.week9-vpc.id
+
+  ingress = [{
+    description = "SSH from VPC"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = []
+
+    # Suggested by professor
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    security_groups  = [aws_security_group.week9-ssh-sg-v2.id]
+    self             = false
+  }]
+
+  egress = [{
+    description = "Allow all outbound"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+
+    # Suggested
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    security_groups  = []
+    self             = false
+  }]
+
+  tags = {
+    Name = "week9-ssh-sg"
+  }
+}
