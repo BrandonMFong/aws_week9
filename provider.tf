@@ -45,6 +45,11 @@ resource "aws_subnet" "week9-pri-a" {
   }
 }
 
+resource "aws_route_table_association" "week9-pri-a-assoc" {
+  subnet_id	 = aws_subnet.week9-pri-a.id
+  route_table_id = aws_route_table.week9-pri-rt.id
+}
+
 # Subnet 2
 resource "aws_subnet" "week9-pri-b" {
   vpc_id                  = aws_vpc.week9-vpc.id
@@ -55,6 +60,11 @@ resource "aws_subnet" "week9-pri-b" {
   tags = {
     Name = "week9-pri-b"
   }
+}
+
+resource "aws_route_table_association" "week9-pri-b-assoc" {
+  subnet_id      = aws_subnet.week9-pri-b.id
+  route_table_id = aws_route_table.week9-pri-rt.id
 }
 
 # Internet Gate Way 
