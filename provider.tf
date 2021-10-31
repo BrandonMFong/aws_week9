@@ -185,6 +185,6 @@ resource "aws_security_group" "week9-ssh-pri-sg" {
   }]
 
   tags = {
-    Name = "week9-ssh-sg"
+    Name = "week9-ssh-pri-sg"
   }
 }
