@@ -37,7 +37,7 @@ resource "aws_vpc" "week9-vpc" {
 resource "aws_subnet" "week9-sub-a" {
   vpc_id                  = aws_vpc.week9-vpc.id
   cidr_block              = "10.0.1.0/24"
-  availability_zone	  = "us-east-1a"
+  availability_zone       = "us-east-1a"
   map_public_ip_on_launch = true
 
   tags = {
@@ -49,7 +49,7 @@ resource "aws_subnet" "week9-sub-a" {
 resource "aws_subnet" "week9-sub-b" {
   vpc_id                  = aws_vpc.week9-vpc.id
   cidr_block              = "10.0.2.0/24"
-  availability_zone	  = "us-east-1b"
+  availability_zone       = "us-east-1b"
   map_public_ip_on_launch = true
 
   tags = {
@@ -70,7 +70,7 @@ resource "aws_subnet" "week9-pri-a" {
 }
 
 resource "aws_route_table_association" "week9-pri-a-assoc" {
-  subnet_id	 = aws_subnet.week9-pri-a.id
+  subnet_id      = aws_subnet.week9-pri-a.id
   route_table_id = aws_route_table.week9-pri-rt.id
 }
 
