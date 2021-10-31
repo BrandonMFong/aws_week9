@@ -22,7 +22,7 @@ provider "aws" {
 }
 
 # VPC
-resource "aws_vpc" "week9-vpc-v2" {
+resource "aws_vpc" "week9-vpc" {
   cidr_block       = "10.0.0.0/16"
   instance_tenancy = "default"
 
@@ -34,32 +34,32 @@ resource "aws_vpc" "week9-vpc-v2" {
 # Subnets 
 
 # Subnet 1
-resource "aws_subnet" "week9-sub-a-v2" {
-  vpc_id                  = aws_vpc.week9-vpc-v2.id
+resource "aws_subnet" "week9-pri-a" {
+  vpc_id                  = aws_vpc.week9-vpc.id
   cidr_block              = "10.0.1.0/24"
   availability_zone       = "us-east-1a"
-  map_public_ip_on_launch = true
+  map_public_ip_on_launch = false
 
   tags = {
-    Name = "week9-sub-a"
+    Name = "week9-pri-a"
   }
 }
 
 # Subnet 2
-resource "aws_subnet" "week9-sub-b-v2" {
-  vpc_id                  = aws_vpc.week9-vpc-v2.id
+resource "aws_subnet" "week9-pri-b" {
+  vpc_id                  = aws_vpc.week9-vpc.id
   cidr_block              = "10.0.2.0/24"
   availability_zone       = "us-east-1b"
-  map_public_ip_on_launch = true
+  map_public_ip_on_launch = false
 
   tags = {
-    Name = "week9-sub-b"
+    Name = "week9-pri-b"
   }
 }
 
 # Internet Gate Way 
 resource "aws_internet_gateway" "week9-igw-v2" {
-  vpc_id = aws_vpc.week9-vpc-v2.id
+  vpc_id = aws_vpc.week9-vpc.id
 
   tags = {
     Name = "week9-igw"
@@ -68,7 +68,7 @@ resource "aws_internet_gateway" "week9-igw-v2" {
 
 # Route Table
 resource "aws_route_table" "week9-rt-v2" {
-  vpc_id = aws_vpc.week9-vpc-v2.id
+  vpc_id = aws_vpc.week9-vpc.id
 
   route = [{
     cidr_block = "0.0.0.0/0"
@@ -101,7 +101,7 @@ resource "aws_route_table" "week9-rt-v2" {
 resource "aws_security_group" "week9-ssh-sg-v2" {
   name        = "week9_ssh_sg"
   description = "Allow SSH inbound traffic"
-  vpc_id      = aws_vpc.week9-vpc-v2.id
+  vpc_id      = aws_vpc.week9-vpc.id
 
   ingress = [{
     description = "SSH from VPC"
