@@ -157,6 +157,6 @@ resource "aws_instance" "week9-vm-v2" {
 # IAM profile ref
 resource "aws_iam_instance_profile" "week9_iam_profile" {
   name = "week9_iam_profile"
-  role = aws_iam_role.automation-role-v3.name
+  role = aws_iam_role.week9-role.name
   tags = {}
 }
